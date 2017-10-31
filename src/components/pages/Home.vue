@@ -57,32 +57,12 @@
           <h3 class="left-nav-heading">men's</h3>
           <div class="left-nav-item categories">
             <ul class="categories-main">
-              <li>
-                <a href="#">Shoes</a>
-                <ul class="categories-sub">
-                  <li><a href="#">Lifestyle (265)</a><li>
-                  <li><a href="#">Running (60)</a></li>
-                  <li><a href="#">Basketball (90)</a></li>
-                  <li><a href="#">Football (24)</a></li>
-                  <li><a href="#">Soccer (43)</a></li>
-                  <li><a href="#">Training & Gym (37)</a></li>
-                  <li><a href="#">Skateboarding (60)</a></li>
-                  <li><a href="#">Baseball / Softball (27)</a></li>
-                  <li><a href="#">Golf (19)</a></li>
-                  <li><a href="#">Tennis (11)</a></li>
-                  <li><a href="#">Track & Field (31)</a></li>
-                  <li><a href="#">Yoga (1)</a></li>
-                  <li><a href="#">Lacrosse (19)</a></li>
+              <li v-for="category in categories">
+                <a href="#">{{ category.name }}</a>
+                <ul class="categories-sub" v-if="category.sub.length">
+                  <li v-for="sub in category.sub"><a href="#">{{ sub.name }}</a></li>
                 </ul>
               </li>
-              <li><a href="#">Tops & T-Shirts</a></li>
-              <li><a href="#">Hoodies & Pullovers</a></li>
-              <li><a href="#">Jackets & Vests</a></li>
-              <li><a href="#">Pants & Tights</a></li>
-              <li><a href="#">Shorts</a></li>
-              <li><a href="#">Surf & Swimwear</a></li>
-              <li><a href="#">Socks</a></li>
-              <li><a href="#">Accessories & Equipment</a></li>
             </ul>
 
           </div>
@@ -197,6 +177,59 @@ export default {
   name: 'home',
 
   created() {
+    this.categories = [
+      {
+        name: 'Shoes',
+        sub: [
+          { name: 'Lifestyle (265)' },
+          { name: 'Running (60)' },
+          { name: 'Basketball (90)' },
+          { name: 'Football (24)' },
+          { name: 'Soccer (43)' },
+          { name: 'Training & Gym (37)' },
+          { name: 'Skateboarding (60)' },
+          { name: 'Baseball / Softball (27)' },
+          { name: 'Golf (19)' },
+          { name: 'Tennis (11)' },
+          { name: 'Track & Field (31)' },
+          { name: 'Yoga (1)' },
+          { name: 'Lacrosse (19)' },
+        ],
+      },
+      {
+        name: 'Tops & T-Shir',
+        sub: [],
+      },
+      {
+        name: 'Hoodies & Pullovers',
+        sub: [],
+      },
+      {
+        name: 'Jackets & Vests',
+        sub: [],
+      },
+      {
+        name: 'Pants & Tights',
+        sub: [],
+      },
+      {
+        name: 'Shorts',
+        sub: [],
+      },
+      {
+        name: 'Surf & Swimwear',
+        sub: [],
+      },
+      {
+        name: 'Socks',
+        sub: [],
+      },
+      {
+        name: 'Accessories & Equipment',
+        sub: [],
+      },
+    ]
+
     this.colours = [
       'white',
       'khaki',
