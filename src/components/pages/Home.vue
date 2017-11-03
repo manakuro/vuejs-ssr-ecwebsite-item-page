@@ -17,8 +17,60 @@
         <div class="nav-menu">
           <div class="container">
             <div class="logo"></div>
+
             <ul class="nav-menu-list">
-              <li><a href="#">men</a></li>
+              <li class="nav-menu-list-item men"
+                  :class="{ on: isNavSubMenuShow('men') }"
+                  @mouseenter="toggleNavSubMenu('men', true)">
+                <a href="#">men</a>
+                <div class="nav-menu-sub" @mouseleave="toggleNavSubMenu('men', false)">
+                  <div class="nav-menu-sub-container">
+                    <div class="nav-menu-sub-content">
+                      <div class="nav-menu-sub-column">
+                        <a  href="#" class="nav-menu-sub-column-heading">BY SPORT</a>
+                        <ul>
+                          <li><a href="#">Lifestyle</a></li>
+                          <li><a href="#">Running</a></li>
+                          <li><a href="#">Basketball</a></li>
+                          <li><a href="#">Soccer</a></li>
+                          <li><a href="#">Training</a></li>
+                          <li><a href="#">Skateboarding</a></li>
+                        </ul>
+                      </div>
+
+                      <div class="nav-menu-sub-column">
+                        <a  href="#" class="nav-menu-sub-column-heading">F1iD</a>
+                        <ul>
+                          <li><a href="#">Mens</a></li>
+                          <li><a href="#">Womens</a></li>
+                          <li><a href="#">Boys</a></li>
+                          <li><a href="#">Girls</a></li>
+                        </ul>
+                      </div>
+
+                      <div class="nav-menu-sub-column">
+                        <a  href="#" class="nav-menu-sub-column-heading">BY COLLECTION</a>
+                        <ul>
+                          <li><a href="#">Classic Chuck Taylor</a></li>
+                          <li><a href="#">One Star</a></li>
+                          <li><a href="#">Converse Chuck 70</a></li>
+                          <li><a href="#">Premium Leather</a></li>
+                          <li><a href="#">Counter Climate</a></li>
+                        </ul>
+                      </div>
+
+                      <div class="nav-menu-sub-column">
+                        <a  href="#" class="nav-menu-sub-column-heading">SALE</a>
+                        <div>
+                          <a href="#" class="nav-menu-sub-column-img-wrapper">
+                            <img :src="require('../../assets/logo.png')"/>
+                          </a>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </li>
               <li><a href="#">women</a></li>
               <li><a href="#">boys</a></li>
               <li><a href="#">girls</a></li>
@@ -137,10 +189,8 @@
           <div class="products">
             <div class="products-item-list"
                  v-for="product in products"
-                 :key="product.id"
-                 @mouseenter="toggleActive(product.id)"
-                 @mouseleave="toggleActive(product.id)">
-              <div class="products-item-list-box" :class="{ on: isActive(product.id) }">
+                 :key="product.id">
+              <div class="products-item-list-box">
                 <div class="products-item-list-content">
                   <div class="products-item-img-wrapper">
                     <img :src="product.img"/>
@@ -309,10 +359,6 @@ export default {
       '38',
       '40',
     ]
-
-    this.activeStatuses = this.products
-      .map(p => ({ [p.id]: false }))
-      .reduce((a, b) => ({ ...a, ...b }))
   },
 
   computed: {
@@ -331,22 +377,28 @@ export default {
         products.push(_data)
       }
 
-      return products;
+      return products
     },
   },
 
   data() {
     return {
-      activeStatuses: {},
+      navSubMenuStatues: {
+        men: false,
+        women: false,
+        boys: false,
+        girls: false,
+        custom: false,
+      },
     }
   },
 
   methods: {
-    toggleActive(key) {
-      this.activeStatuses[key] = !this.activeStatuses[key]
+    toggleNavSubMenu(key, status) {
+      this.navSubMenuStatues[key] = status
     },
-    isActive(key) {
-      return this.activeStatuses[key]
+    isNavSubMenuShow(key) {
+      return this.navSubMenuStatues[key]
     },
   },
 }
@@ -405,7 +457,6 @@ header {
   height: 70px;
   padding: 15px 0;
   border-bottom: 1px solid $bc;
-  font-family: $font-heading;
   background: $bg-main;
 
   > .container {
@@ -419,14 +470,23 @@ header {
     justify-content: center;
     align-items: center;
 
-    text-transform: uppercase;
-    color: $fc-heading;
-
     > li {
       padding: 0 10px;
 
       > a {
-        color: inherit;
+        font-family: $font-heading;
+        text-transform: uppercase;
+        color: $fc-heading;
+      }
+
+      > a:after {
+        content: '';
+        display: block;
+        visibility: hidden;
+        width: 100%;
+        height: 1px;
+        margin-top: 2px;
+        background: $bc-nav-menu-list;
       }
     }
   }
@@ -470,6 +530,78 @@ header {
   .arrow > i {
     font-size: 20px;
   }
+}
+
+.nav-menu-list {
+  .nav-menu-list-item.on {
+    .nav-menu-sub {
+      display: block;
+    }
+
+    > a:after {
+      visibility: visible;
+    }
+  }
+}
+
+.nav-menu-sub {
+  display: none;
+  width: 100%;
+  position: absolute;
+  top: calc(100% - 61px);
+  left: 0;
+  background: $bg-main;
+  border-bottom: 1px solid $bc;
+
+  .nav-menu-sub-container {
+    width: 700px;
+    height: 100%;
+    margin: 0 auto;
+    padding: 30px 0;
+  }
+
+  .nav-menu-sub-content {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    grid-gap: 15px;
+    text-align: left;
+  }
+
+  .nav-menu-sub-column {
+    color: $fc-heading;
+
+    .nav-menu-sub-column-heading {
+      display: inline-block;
+      margin-bottom: 15px;
+
+      font-family: $font-heading;
+      font-weight: 500;
+      text-transform: uppercase;
+      color: inherit;
+
+      @include hover;
+    }
+
+    > ul > li {
+      margin-bottom: 7px;
+    }
+
+    > ul > li > a {
+      color: inherit;
+      font-size: 14px;
+      @include hover;
+    }
+
+    // image
+    .nav-menu-sub-column-img-wrapper {
+      display: inline-block;
+      width: 200px;
+      height: 150px;
+      overflow: hidden;
+      background: $bg-product-item;
+    }
+  }
+
 }
 
 /* -----------------------
@@ -775,6 +907,18 @@ header {
     grid-template-columns: repeat(4, 1fr);
     grid-gap: 15px;
 
+    // its hovered
+    .products-item-list {
+      &:hover > .products-item-list-box {
+        visibility: visible;
+        z-index: z(product-item-on);
+      }
+
+      &:hover .products-item-thumbs-img-wrapper {
+        display: block;
+      }
+    }
+
     .products-item-list {
       position: relative;
       min-height: 310px;
@@ -792,11 +936,6 @@ header {
         visibility: hidden;
         padding: 10px;
         border: 1px solid $bc-product-item;
-
-        &.on {
-          visibility: visible;
-          z-index: z(product-item-on);
-        }
       }
 
       // product image
@@ -814,10 +953,6 @@ header {
       }
 
       // thumbnails
-      .products-item-list-box.on  .products-item-thumbs-img-wrapper {
-        display: block;
-      }
-
       .products-item-thumbs-img-wrapper {
         display: none;
         width: 180px;
