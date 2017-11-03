@@ -331,7 +331,7 @@ export default {
         products.push(_data)
       }
 
-      return products
+      return products;
     },
   },
 
@@ -759,6 +759,7 @@ header {
   margin-bottom: 30px;
 
   .main-content-header {
+    font-family: $font-heading;
     padding-top: 20px;
     margin-bottom: 20px;
 
@@ -879,12 +880,7 @@ header {
       .products-item-info-para {
         font-size: 14px;
       }
-
-
     }
-
-
-
   }
 }
 
