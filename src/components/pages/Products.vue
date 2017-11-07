@@ -13,9 +13,11 @@
 </template>
 
 <script>
-import cloneDeep from 'lodash/cloneDeep'
+import { createNamespacedHelpers } from 'vuex'
 
 import ProductsItem from 'src/components/pages/ProductsItem'
+
+const { mapActions, mapState } = createNamespacedHelpers('products')
 
 export default {
   name: 'products',
@@ -24,26 +26,12 @@ export default {
     ProductsItem,
   },
 
-  created() {},
+  created() {
+    this.fetchProducts()
+  },
 
   computed: {
-    products() {
-      const products = []
-      const data = {
-        img: require('../../assets/test-img.jpeg'),
-        title: 'F1 Phenom',
-        description: 'Men\'s 29" Running Shoes',
-        price: '$90',
-      }
-
-      for (let i = 0; i < 33; i++) {
-        let _data = cloneDeep(data)
-        _data.id = i
-        products.push(_data)
-      }
-
-      return products
-    },
+    ...mapState(['products']),
   },
 
   data() {
@@ -51,6 +39,7 @@ export default {
   },
 
   methods: {
+    ...mapActions(['fetchProducts']),
   },
 }
 </script>
