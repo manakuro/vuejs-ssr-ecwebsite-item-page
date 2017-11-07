@@ -91,3 +91,83 @@ select {
 *:focus {
   outline: none;
 }
+
+
+/* -----------------------
+ Layout
+----------------------- */
+.container {
+  width: 1200px;
+  margin: 0 auto;
+}
+
+
+/* -----------------------
+ Form
+----------------------- */
+.input {
+  width: 100%;
+  border: 1px solid #ddd;
+}
+
+.search {
+  padding: 10px 10px 10px 35px;
+}
+
+/* -----------------------
+ Colours
+----------------------- */
+.colours {
+  display: flex;
+  flex-wrap: wrap;
+
+  > li {
+    margin: 0 10px 10px 0;
+  }
+
+  > li > .colour-item {
+    height: 24px;
+    width: 24px;
+    display: inline-block;
+    border-radius: 24px;
+    cursor: pointer;
+  }
+
+  .white {
+    background-color: $cp-white;
+    border: 1px solid $cp-white-bd;
+  }
+  .khaki {
+    background-color: $cp-khaki;
+    border: 1px solid $cp-khaki-bd;
+  }
+  .yellow {
+    background-color: $cp-yellow;
+  }
+  .green {
+    background-color: $cp-green;
+  }
+  .blue {
+    background-color: $cp-blue;
+  }
+  .olive {
+    background-color: $cp-olive;
+  }
+  .red {
+    background-color: $cp-red;
+  }
+  .grey {
+    background-color: $cp-grey;
+  }
+  .brown {
+    background-color: $cp-brown;
+  }
+  .black {
+    background-color: $cp-black;
+  }
+  .cream {
+    background-color: $cp-cream;
+    border: 1px solid $cp-cream-bd;
+  }
+}
+
