@@ -13,11 +13,8 @@
 </template>
 
 <script>
-import { createNamespacedHelpers } from 'vuex'
 
 import ProductsItem from 'src/components/pages/ProductsItem'
-
-const { mapActions, mapState } = createNamespacedHelpers('products')
 
 export default {
   name: 'products',
@@ -26,20 +23,14 @@ export default {
     ProductsItem,
   },
 
-  created() {
-    this.fetchProducts()
-  },
-
-  computed: {
-    ...mapState(['products']),
+  props: {
+    products: {
+      type: Array,
+    },
   },
 
   data() {
     return {}
-  },
-
-  methods: {
-    ...mapActions(['fetchProducts']),
   },
 }
 </script>

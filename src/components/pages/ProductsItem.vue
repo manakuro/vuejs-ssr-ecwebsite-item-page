@@ -3,15 +3,15 @@
     <div class="products-item-list-box">
       <div class="products-item-list-content">
         <div class="products-item-img-wrapper">
-          <img :src="img"/>
+          <img :src="imgURL" />
         </div>
 
         <div class="products-item-thumbs">
           <div class="products-item-thumbs-img-wrapper">
             <ul>
-              <li><a href="#"><img :src="img"/></a></li>
-              <li><a href="#"><img :src="img" class="sprite-index-1"/></a></li>
-              <li><a href="#"><img :src="img" class="sprite-index-2"/></a></li>
+              <li><a href="#"><img :src="imgURL"/></a></li>
+              <li><a href="#"><img :src="imgURL" class="sprite-index-1"/></a></li>
+              <li><a href="#"><img :src="imgURL" class="sprite-index-2"/></a></li>
             </ul>
 
           </div>
@@ -55,6 +55,13 @@ export default {
       required: true,
     },
   },
+
+  computed: {
+    imgURL() {
+      return require('../../assets/test-img.jpeg')
+    },
+  },
+
 
   data() {
     return {}

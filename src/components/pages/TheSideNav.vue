@@ -1,10 +1,10 @@
 <template>
   <div class="left-nav">
-    <h3 class="left-nav-heading">men's</h3>
+    <h2 class="left-nav-heading">men's</h2>
     <div class="left-nav-item categories">
       <ul class="categories-main">
         <li v-for="category in categories">
-          <a href="#">{{ category.name }}</a>
+          <a @click.prevent="update('category', category.id)">{{ category.name }}</a>
           <ul class="categories-sub" v-if="category.sub.length">
             <li v-for="sub in category.sub"><a href="#">{{ sub.name }}</a></li>
           </ul>
@@ -15,43 +15,16 @@
     <div class="left-nav-item filters">
       <h3 class="left-nav-heading">filters</h3>
 
-      <div class="filters-list" v-for="n in 5">
-        <h4 class="filters-list-heading">Sport</h4>
+      <div class="filters-list" v-for="(filter, key) in filters" :key="key">
+        <h4 class="filters-list-heading">{{ filter.name }}</h4>
         <ul class="filters-categories">
-          <li>
-            <label for="lifestyle">
-              <input type="checkbox" id="lifestyle" value="0">
-              <span class="checkbox"><span>Lifestyle</span></span>
-            </label>
-          </li>
-          <li>
-            <label for="running">
-              <input type="checkbox" id="running" value="1">
-              <span class="checkbox"><span>Running</span></span>
-            </label>
-          </li>
-          <li>
-            <label for="basketball">
-              <input type="checkbox" id="basketball" value="2">
-              <span class="checkbox"><span>Basketball</span></span>
-            </label>
-          </li>
-          <li>
-            <label for="football">
-              <input type="checkbox" id="football" value="3">
-              <span class="checkbox"><span>Football</span></span>
-            </label>
-          </li>
-          <li>
-            <label for="soccer">
-              <input type="checkbox" id="soccer" value="4">
-              <span class="checkbox"><span>Soccer</span></span>
-            </label>
-          </li>
-          <li>
-            <label for="training-gym">
-              <input type="checkbox" id="training-gym" value="5">
-              <span class="checkbox"><span>Training & Gym</span></span>
+          <li v-for="filterCategory in filter.categories" class="filters-categories-list-item">
+            <label :for="filterCategory.id">
+              <input type="checkbox"
+                     :id="filterCategory.id"
+                     :value="filterCategory.id"
+                     v-model="filtersInput" />
+              <span class="checkbox"><span>{{ filterCategory.name }}</span></span>
             </label>
           </li>
         </ul>
@@ -61,7 +34,11 @@
         <h4 class="filters-list-heading">Colour</h4>
 
         <ul class="colours">
-          <li v-for="colour in colours"><span class="colour-item" :class="colour"></span></li>
+          <li v-for="colour in colours">
+            <a @click.prevent="update('colour', colour.id)">
+              <span class="colour-item" :class="colour.name"></span>
+            </a>
+          </li>
         </ul>
       </div>
 
@@ -69,7 +46,11 @@
         <h4 class="filters-list-heading">Size</h4>
 
         <ul class="sizes">
-          <li v-for="size in sizes"><span class="size-item">{{ size }}</span></li>
+          <li v-for="size in sizes">
+            <a @click.prevent="update('size', size.id)">
+              <span class="size-item">{{ size.name }}</span>
+            </a>
+          </li>
         </ul>
       </div>
     </div>
@@ -78,103 +59,62 @@
 </template>
 
 <script>
+  import { createNamespacedHelpers } from 'vuex'
+
+  const { mapActions } = createNamespacedHelpers('products/productsQuery')
+
   export default {
     name: 'the-sidenav',
 
+    props: {
+      categories: {
+        type: Array,
+        required: true,
+      },
+      filters: {
+        type: Object,
+        required: true,
+      },
+      sizes: {
+        type: Array,
+        required: true,
+      },
+      colours: {
+        type: Array,
+        required: true,
+      },
+    },
+
     created() {
-      this.categories = [
-        {
-          name: 'Shoes',
-          sub: [
-            { name: 'Lifestyle (265)' },
-            { name: 'Running (60)' },
-            { name: 'Basketball (90)' },
-            { name: 'Football (24)' },
-            { name: 'Soccer (43)' },
-            { name: 'Training & Gym (37)' },
-            { name: 'Skateboarding (60)' },
-            { name: 'Baseball / Softball (27)' },
-            { name: 'Golf (19)' },
-            { name: 'Tennis (11)' },
-            { name: 'Track & Field (31)' },
-            { name: 'Yoga (1)' },
-            { name: 'Lacrosse (19)' },
-          ],
-        },
-        {
-          name: 'Tops & T-Shir',
-          sub: [],
-        },
-        {
-          name: 'Hoodies & Pullovers',
-          sub: [],
-        },
-        {
-          name: 'Jackets & Vests',
-          sub: [],
-        },
-        {
-          name: 'Pants & Tights',
-          sub: [],
-        },
-        {
-          name: 'Shorts',
-          sub: [],
-        },
-        {
-          name: 'Surf & Swimwear',
-          sub: [],
-        },
-        {
-          name: 'Socks',
-          sub: [],
-        },
-        {
-          name: 'Accessories & Equipment',
-          sub: [],
-        },
-      ]
+      // initialize query state
+      const { route } = this.$store.state
+      this.updateQuery(route.query || {})
+    },
 
-      this.colours = [
-        'white',
-        'khaki',
-        'yellow',
-        'green',
-        'blue',
-        'olive',
-        'red',
-        'grey',
-        'brown',
-        'black',
-        'cream',
-        'black',
-      ]
-
-      this.sizes = [
-        'xs',
-        's',
-        'm',
-        'l',
-        'xl',
-        '2xl',
-        '28',
-        '29',
-        '30',
-        '31',
-        '32',
-        '33',
-        '34',
-        '36',
-        '38',
-        '40',
-      ]
+    computed: {
+      filtersInput: {
+        get() {
+          return this.$store.state.products.productsQuery.query.filters
+        },
+        set(value) {
+          const filters = value
+          this.$store.dispatch('products/productsQuery/updateQuery', { filters })
+        },
+      },
     },
 
     data() {
       return {}
     },
 
-    methods: {},
+    methods: {
+      ...mapActions(['updateQuery']),
+      ...mapActions({
+        update(dispatch, queryKey, queryVal) {
+          dispatch('updateQuery', { [queryKey]: queryVal })
+        },
+      }),
+    },
   }
 </script>
 
@@ -241,6 +181,7 @@
 
       .filters-categories > li {
         margin-top: 5px;
+        text-transform: capitalize;
       }
 
       .filters-categories > li > label {

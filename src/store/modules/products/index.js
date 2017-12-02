@@ -1,26 +1,13 @@
-import cloneDeep from 'lodash/cloneDeep'
+import { query } from 'src/api/products'
 
-function query() {
-  let payload = []
-  setTimeout(() => {
-    const data = {
-      img: require('../../../assets/test-img.jpeg'),
-      title: 'F1 Phenom',
-      description: 'Men\'s 29" Running Shoes',
-      price: '$90',
-    }
-
-    for (let i = 0; i < 50; i++) {
-      let _data = cloneDeep(data)
-      _data.id = i
-      payload.push(_data)
-    }
-  }, 500)
-  return payload
-}
+import productsQuery from 'src/store/modules/products/productsQuery'
 
 const products = {
   namespaced: true,
+  modules: {
+    productsQuery,
+  },
+
   state: {
     /**
      *
@@ -33,20 +20,25 @@ const products = {
      * fetch product list
      *
      */
-    async fetchProducts({ commit }) {
-      let payload = []
+    async fetchProducts({ commit, rootState }) {
+      const { route } = rootState
+      const variables = {
+        category: parseInt(route.query.category, 10),
+      }
+      let payload
+
       try {
-        payload = await query()
+        payload = await query.fetchProducts(variables)
       } catch (e) {
         return
       }
-
-      commit('update', payload)
+      commit('update', payload.data)
     },
   },
   mutations: {
-    update(state, products) {
+    update(state, { products }) {
       state.products = products
+      console.log('state.products', state.products)
     },
   },
   getters: {},

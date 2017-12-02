@@ -1,0 +1,10 @@
+query ($category: Int) {
+  products(category: $category) {
+    id
+    title
+    description
+    title
+    price
+    img
+  }
+}
