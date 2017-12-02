@@ -16,7 +16,7 @@
 </template>
 
 <script>
-import { mapState, mapActions } from 'vuex'
+import { mapState, mapActions, mapGetters } from 'vuex'
 import TheHeader from 'src/components/pages/TheHeader'
 import TheFooter from 'src/components/pages/TheFooter'
 import TheSideNav from 'src/components/pages/TheSideNav'
@@ -34,11 +34,13 @@ export default {
 
   computed: {
     ...mapState('products', ['products']),
-    ...mapState('products/productsQuery', ['query']),
+    ...mapGetters('products/productsQuery', ['query']),
   },
 
   created() {
-    this.fetchProducts()
+    // initialize query state and fetch products
+    const { route } = this.$store.state
+    this.updateQueries(route.query || {})
 
     this.searchItems = {
       categories: [
@@ -161,8 +163,9 @@ export default {
 
   methods: {
     ...mapActions('products', ['fetchProducts']),
+    ...mapActions('products/productsQuery', ['updateQueries']),
 
-    updateQuery() {
+    onUpdateQuery() {
       const { query } = this
       this.$router.push({ name: 'home', query })
       this.fetchProducts()
@@ -171,7 +174,7 @@ export default {
 
   watch: {
     query() {
-      this.updateQuery()
+      this.onUpdateQuery()
     },
   },
 

@@ -85,20 +85,14 @@
       },
     },
 
-    created() {
-      // initialize query state
-      const { route } = this.$store.state
-      this.updateQuery(route.query || {})
-    },
-
     computed: {
       filtersInput: {
         get() {
-          return this.$store.state.products.productsQuery.query.filters
+          return this.$store.state.products.productsQuery.queries.filters
         },
         set(value) {
           const filters = value
-          this.$store.dispatch('products/productsQuery/updateQuery', { filters })
+          this.$store.dispatch('products/productsQuery/updateQueries', { filters })
         },
       },
     },
@@ -108,10 +102,10 @@
     },
 
     methods: {
-      ...mapActions(['updateQuery']),
+      ...mapActions(['updateQueries']),
       ...mapActions({
         update(dispatch, queryKey, queryVal) {
-          dispatch('updateQuery', { [queryKey]: queryVal })
+          dispatch('updateQueries', { [queryKey]: queryVal })
         },
       }),
     },
