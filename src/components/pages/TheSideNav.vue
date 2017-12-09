@@ -3,10 +3,12 @@
     <h2 class="left-nav-heading">men's</h2>
     <div class="left-nav-item categories">
       <ul class="categories-main">
-        <li v-for="category in categories">
-          <a @click.prevent="update('category', category.id)">{{ category.name }}</a>
-          <ul class="categories-sub" v-if="category.sub.length">
-            <li v-for="sub in category.sub"><a href="#">{{ sub.name }}</a></li>
+        <li v-for="c in categories.main">
+          <a @click.prevent="update('category', c.id)">{{ c.name }}</a>
+          <ul class="categories-sub" v-if="categories.sub[c.id]">
+            <li v-for="sub in categories.sub[c.id]">
+              <a @click.prevent="update('category', sub.id)">{{ sub.name }}</a>
+            </li>
           </ul>
         </li>
       </ul>
@@ -35,9 +37,7 @@
 
         <ul class="colours">
           <li v-for="colour in colours">
-            <a @click.prevent="update('colour', colour.id)">
-              <span class="colour-item" :class="colour.name"></span>
-            </a>
+            <a @click.prevent="update('colour', colour.id)" class="colour-item" :class="colour.name"></a>
           </li>
         </ul>
       </div>
@@ -68,7 +68,7 @@
 
     props: {
       categories: {
-        type: Array,
+        type: Object,
         required: true,
       },
       filters: {
@@ -91,8 +91,7 @@
           return this.$store.state.products.productsQuery.queries.filters
         },
         set(value) {
-          const filters = value
-          this.$store.dispatch('products/productsQuery/updateQueries', { filters })
+          this.updateQueries({ filters: value })
         },
       },
     },
@@ -131,7 +130,9 @@
       border-bottom: 1px solid $bc;
     }
 
-    // Categories
+    /* --------------------------
+      Categories
+     ---------------------------*/
     .categories-main {
       > li {
         margin-bottom: 10px;
@@ -152,10 +153,13 @@
 
     a {
       color: inherit;
+      cursor: pointer;
       @include hover;
     }
 
-    // Filters
+    /* --------------------------
+      Filters
+    ---------------------------*/
     .filters {
 
       .filters-list {
@@ -222,15 +226,14 @@
       }
     }
 
-    // Sizes
+    /* --------------------------
+      Sizes
+    ---------------------------*/
     .sizes {
       display: flex;
       flex-wrap: wrap;
 
       > li {
-        width: 42px;
-        height: 42px;
-        line-height: 42px;
         text-align: center;
         margin-right: -1px;
         margin-bottom: -1px;
@@ -242,6 +245,18 @@
         &:hover {
           background: $bg-size;
           color: $fc-size;
+        }
+
+        > a {
+          display: inline-block;
+          width: 42px;
+          height: 42px;
+          line-height: 42px;
+
+          &:hover {
+            color: $fc-size;
+            opacity: 1;
+          }
         }
       }
 
