@@ -63,8 +63,11 @@
 
 <script>
   import { createNamespacedHelpers } from 'vuex'
+  import createMapHelpers from 'src/utils/createMapHelpers'
 
   const { mapActions } = createNamespacedHelpers('products/productsQuery')
+
+  const { mapSetGet } = createMapHelpers('products/productsQuery', { state: 'queries', action: 'updateQueries' })
 
   export default {
     name: 'the-sidenav',
@@ -89,14 +92,7 @@
     },
 
     computed: {
-      filtersInput: {
-        get() {
-          return this.$store.state.products.productsQuery.queries.filters
-        },
-        set(value) {
-          this.updateQueries({ filters: value })
-        },
-      },
+      ...mapSetGet({ filtersInput: 'filters' }),
     },
 
     created() {
