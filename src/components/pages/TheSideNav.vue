@@ -17,9 +17,12 @@
     <div class="left-nav-item filters">
       <h3 class="left-nav-heading">filters</h3>
 
-      <div class="filters-list" v-for="(filter, key) in filters" :key="key">
-        <h4 class="filters-list-heading">{{ filter.name }}</h4>
-        <ul class="filters-categories">
+      <div class="filters-list-wrapper"
+           v-for="(filter, key) in filters"
+           :key="key"
+           :class="{ hide: isHideList[key] }" >
+        <h4 class="filters-list-wrapper-heading" @click="toggleList(key)">{{ filter.name }}</h4>
+        <ul class="filters-categories filters-list">
           <li v-for="filterCategory in filter.categories" class="filters-categories-list-item">
             <label :for="filterCategory.id">
               <input type="checkbox"
@@ -32,20 +35,20 @@
         </ul>
       </div>
 
-      <div class="filters-list">
-        <h4 class="filters-list-heading">Colour</h4>
+      <div class="filters-list-wrapper" :class="{ hide: isHideList['colours'] }">
+        <h4 class="filters-list-wrapper-heading" @click="toggleList('colours')">Colour</h4>
 
-        <ul class="colours">
+        <ul class="colours filters-list">
           <li v-for="colour in colours">
             <a @click.prevent="update('colour', colour.id)" class="colour-item" :class="colour.name"></a>
           </li>
         </ul>
       </div>
 
-      <div class="filters-list">
-        <h4 class="filters-list-heading">Size</h4>
+      <div class="filters-list-wrapper" :class="{ hide: isHideList['sizes'] }">
+        <h4 class="filters-list-wrapper-heading" @click="toggleList('sizes')">Size</h4>
 
-        <ul class="sizes">
+        <ul class="sizes filters-list">
           <li v-for="size in sizes">
             <a @click.prevent="update('size', size.id)">
               <span class="size-item">{{ size.name }}</span>
@@ -96,17 +99,30 @@
       },
     },
 
+    created() {
+      this.isHideList = [Object.keys(this.filters), 'colours', 'sizes'].reduce((acc, key) => {
+        acc[key] = false
+        return acc
+      },{})
+    },
+
     data() {
-      return {}
+      return {
+        isHideList: {},
+      }
     },
 
     methods: {
       ...mapActions(['updateQueries']),
       ...mapActions({
-        update(dispatch, queryKey, queryVal) {
-          dispatch('updateQueries', { [queryKey]: queryVal })
+        update(dispatch, key, val) {
+          dispatch('updateQueries', { [key]: val })
         },
       }),
+
+      toggleList(key) {
+        this.isHideList[key] = !this.isHideList[key]
+      },
     },
   }
 </script>
@@ -124,7 +140,7 @@
 
     .left-nav-heading {
       padding-bottom: 15px;
-      margin-bottom: 30px;
+      margin-bottom: 20px;
       text-transform: uppercase;
       font-family: $font-heading;
       border-bottom: 1px solid $bc;
@@ -162,7 +178,7 @@
     ---------------------------*/
     .filters {
 
-      .filters-list {
+      .filters-list-wrapper {
         padding: 20px 0;
         border-bottom: 1px solid $bc;
 
@@ -171,15 +187,47 @@
         }
       }
 
-      .filters-list-heading {
+      // open filter list
+      .filters-list-wrapper.hide {
+        .filters-list-wrapper-heading {
+          margin-bottom: 0;
+
+          &:after {
+            content: '−';
+            font-size: 17px;
+            font-weight: 500;
+          }
+        }
+
+        .filters-list {
+          display: none;
+          opacity: 0;
+
+          transition: .25s;
+        }
+      }
+
+      .filters-list-wrapper-heading {
         font-size: 14px;
-        margin-bottom: 10px;
+        margin-bottom: 20px;
         text-transform: uppercase;
+        position: relative;
+        cursor: pointer;
+
+        &:after {
+          content: '＋';
+          display: inline-block;
+          position: absolute;
+          right: 0;
+          top: 0;
+          font-weight: 100;
+        }
       }
 
       .filters-categories > li {
         margin-top: 5px;
         text-transform: capitalize;
+        font-size: 14px;
       }
 
       .filters-categories > li > label {

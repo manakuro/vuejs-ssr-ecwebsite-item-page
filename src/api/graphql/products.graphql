@@ -1,5 +1,8 @@
-query ($category: Int) {
-  products(category: $category) {
+query (
+  $category: Int
+  $filters: [Int]
+) {
+  products(category: $category, filters: $filters) {
     id
     title
     description

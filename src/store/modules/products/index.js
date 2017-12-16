@@ -22,15 +22,18 @@ const products = {
      */
     async fetchProducts({ commit, rootState }) {
       const { route } = rootState
-      const variables = {
-        category: parseInt(route.query.category, 10),
-      }
+      const { productsQuery } = rootState.products
+      console.log('route', route)
+      console.log('productsQuery', productsQuery)
+
+      const { category, filters } = productsQuery.queries
+
       let payload
 
       try {
-        payload = await query.fetchProducts(variables)
+        payload = await query.fetchProducts({ category, filters })
       } catch (e) {
-        return
+        throw e
       }
       commit('update', payload.data)
     },

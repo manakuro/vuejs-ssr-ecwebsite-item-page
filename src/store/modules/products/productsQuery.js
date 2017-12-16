@@ -4,6 +4,8 @@ import isArray from 'lodash/isArray'
 
 import { query } from 'src/api/products'
 
+import { toInt } from 'src/utils'
+
 const productsQuery = {
   namespaced: true,
   state: {
@@ -50,7 +52,8 @@ const productsQuery = {
     },
 
     updateQueries({ commit }, payload) {
-      commit('update', payload)
+      const parsed = toInt(payload)
+      commit('update', parsed)
     },
   },
   mutations: {
