@@ -10,6 +10,7 @@ const productsQuery = {
   namespaced: true,
   state: {
     /**
+     * query for url
      *
      * @type {object} queries
      * @type {number} queries.category
@@ -25,6 +26,7 @@ const productsQuery = {
     },
 
     /**
+     * items for category list
      *
      * @type {object} productsCategories
      * @type {array}  productsCategories.categories
@@ -79,7 +81,7 @@ const productsQuery = {
 
       let result = { main: [], sub: {} }
       categories.forEach(c => {
-        if (c.parentId === '0') {
+        if (c.parentId === 0) {
           result.main.push(c)
         } else {
           result.sub[c.parentId] = result.sub[c.parentId] || []
@@ -143,6 +145,10 @@ const productsQuery = {
 
     categoryList(state, { categories, colours, sizes, filters }) {
       return { categories, colours, sizes, filters }
+    },
+
+    isCurrentCategory({ queries }) {
+      return category => queries.category === category
     },
   },
 }

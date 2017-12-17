@@ -4,10 +4,12 @@
     <div class="left-nav-item categories">
       <ul class="categories-main">
         <li v-for="c in categories.main">
-          <a @click.prevent="update('category', c.id)">{{ c.name }}</a>
+          <a @click.prevent="update('category', c.id)"
+             :class="{ 'current': isCurrentCategory(c.id) }">{{ c.name }}</a>
           <ul class="categories-sub" v-if="categories.sub[c.id]">
             <li v-for="sub in categories.sub[c.id]">
-              <a @click.prevent="update('category', sub.id)">{{ sub.name }}</a>
+              <a @click.prevent="update('category', sub.id)"
+                 :class="{ 'current': isCurrentCategory(sub.id) }">{{ sub.name }}</a>
             </li>
           </ul>
         </li>
@@ -63,9 +65,10 @@
 
 <script>
   import { createNamespacedHelpers } from 'vuex'
+  import PerfectScrollbar from 'perfect-scrollbar'
   import createMapHelpers from 'src/utils/createMapHelpers'
 
-  const { mapActions } = createNamespacedHelpers('products/productsQuery')
+  const { mapActions, mapGetters } = createNamespacedHelpers('products/productsQuery')
 
   const { mapSetGet } = createMapHelpers('products/productsQuery', { state: 'queries', action: 'updateQueries' })
 
@@ -93,6 +96,7 @@
 
     computed: {
       ...mapSetGet({ filtersInput: 'filters' }),
+      ...mapGetters(['isCurrentCategory']),
     },
 
     created() {
@@ -100,6 +104,17 @@
         acc[key] = false
         return acc
       },{})
+    },
+
+    mounted() {
+      window.setTimeout(() => {
+        this.ps = new PerfectScrollbar('.left-nav')
+      })
+    },
+
+    destroyed() {
+      this.ps.destroy()
+      this.ps = null
     },
 
     data() {
@@ -127,8 +142,10 @@
   .left-nav {
     padding: 20px;
     width: 260px;
+    height: 100vh;
     text-align: left;
     background: $bg-main;
+    position: relative;
 
     .left-nav-item {
       margin-bottom: 20px;
@@ -148,6 +165,12 @@
     .categories-main {
       > li {
         margin-bottom: 10px;
+      }
+
+      a {
+        &.current {
+          font-weight: 700;
+        }
       }
     }
 
@@ -310,6 +333,4 @@
       }
     }
   }
-
-
 </style>

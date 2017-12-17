@@ -14,6 +14,7 @@ sync(store, router)
 // global style
 require('sanitize.css/sanitize.css')
 require('font-awesome/css/font-awesome.min.css')
+require('perfect-scrollbar/css/perfect-scrollbar.css')
 
 /* eslint-disable no-new */
 new Vue({
