@@ -8,18 +8,18 @@
     "dev": "node build/dev-server.js",
     "start": "npm run dev",
     "build": "node build/build.js",
-    "unit": "cross-env BABEL_ENV=test karma start test/unit/karma.conf.js --single-run",
+    "unit":
+      "cross-env BABEL_ENV=test karma start test/unit/karma.conf.js --single-run",
     "e2e": "node test/e2e/runner.js",
     "test": "npm run unit && npm run e2e",
     "lint": "eslint --ext .js,.vue src test/unit/specs test/e2e/specs",
     "precommit": "lint-staged"
   },
   "lint-staged": {
-    "*.js": [
-      "prettier-eslint --write",
-      "eslint",
-      "git add"
-    ]
+    "*.js": ["prettier-eslint --write", "eslint", "git add"],
+    "*.graphql": ["prettier --write", "git add"],
+    "*.json": ["prettier --write", "git add"],
+    "*.vue": ["eslint --fix", "git add"]
   },
   "dependencies": {
     "apollo-cache-inmemory": "^1.1.1",
@@ -119,9 +119,5 @@
     "npm": "*",
     "yarn": "1.3.2"
   },
-  "browserslist": [
-    "> 1%",
-    "last 2 versions",
-    "not ie <= 8"
-  ]
+  "browserslist": ["> 1%", "last 2 versions", "not ie <= 8"]
 }

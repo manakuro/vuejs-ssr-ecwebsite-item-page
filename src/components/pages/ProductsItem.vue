@@ -1,36 +1,38 @@
 <template>
-  <div class="products-item-list">
-    <div class="products-item-list-box">
-      <div class="products-item-list-content">
-        <div class="products-item-img-wrapper">
-          <img :src="imgURL" />
-        </div>
+  <transition name="fade">
+    <div class="products-item-list">
+      <div class="products-item-list-box">
+        <div class="products-item-list-content">
+          <div class="products-item-img-wrapper">
+            <img :src="imgURL" />
+          </div>
 
-        <div class="products-item-thumbs">
-          <div class="products-item-thumbs-img-wrapper">
-            <ul>
-              <li><a href="#"><img :src="imgURL"/></a></li>
-              <li><a href="#"><img :src="imgURL" class="sprite-index-1"/></a></li>
-              <li><a href="#"><img :src="imgURL" class="sprite-index-2"/></a></li>
+          <div class="products-item-thumbs">
+            <div class="products-item-thumbs-img-wrapper">
+              <ul>
+                <li><a href="#"><img :src="imgURL"/></a></li>
+                <li><a href="#"><img :src="imgURL" class="sprite-index-1"/></a></li>
+                <li><a href="#"><img :src="imgURL" class="sprite-index-2"/></a></li>
+              </ul>
+
+            </div>
+          </div>
+
+          <div class="products-item-info">
+            <ul class="products-item-info-colours colours">
+              <li><span class="colour-item red"></span></li>
+              <li><span class="colour-item brown"></span></li>
+              <li><span class="colour-item cream"></span></li>
             </ul>
 
+            <h4 class="products-item-info-heading">{{ title }}</h4>
+            <p class="products-item-info-para">{{ description }}</p>
+            <p class="products-item-info-para">{{ price }}</p>
           </div>
-        </div>
-
-        <div class="products-item-info">
-          <ul class="products-item-info-colours colours">
-            <li><span class="colour-item red"></span></li>
-            <li><span class="colour-item brown"></span></li>
-            <li><span class="colour-item cream"></span></li>
-          </ul>
-
-          <h4 class="products-item-info-heading">{{ title }}</h4>
-          <p class="products-item-info-para">{{ description }}</p>
-          <p class="products-item-info-para">{{ price }}</p>
         </div>
       </div>
     </div>
-  </div>
+  </transition>
 </template>
 
 <script>
